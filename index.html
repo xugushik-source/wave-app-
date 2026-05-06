@@ -126,29 +126,56 @@ text-align:center;
 и действием.
 </div>
 
-<button class="primary" onclick="playScenario('no_reply')">Он / она не отвечает</button>
-<button onclick="playScenario('want_write')">Хочу написать сейчас</button>
-<button onclick="playScenario('not_loved')">Меня не любят</button>
-<button onclick="playScenario('anger')">Злюсь и хочу всё разрушить</button>
-<button onclick="playScenario('abandon')">Страх, что меня бросят</button>
-<button onclick="playScenario('empty')">Внутри пусто</button>
+<button class="primary" onclick="playScenario('no_reply')">
+Он / она не отвечает
+</button>
+
+<button onclick="playScenario('want_write')">
+Хочу написать сейчас
+</button>
+
+<button onclick="playScenario('not_loved')">
+Меня не любят
+</button>
+
+<button onclick="playScenario('anger')">
+Злюсь и хочу всё разрушить
+</button>
+
+<button onclick="playScenario('abandon')">
+Страх, что меня бросят
+</button>
+
+<button onclick="playScenario('empty')">
+Внутри пусто
+</button>
 
 <div class="player" id="player">
-<div class="player-title" id="scenarioTitle">Сценарий</div>
-<div class="status" id="status">Подготовка...</div>
+
+<div class="player-title" id="scenarioTitle">
+Сценарий
+</div>
+
+<div class="status" id="status">
+Подготовка...
+</div>
+
 <div class="current-text" id="currentText"></div>
+
 <div class="wave">
 <div class="wave-fill" id="waveFill"></div>
 </div>
+
 </div>
 
 <div class="notice">
-Если звук не запускается, нажми кнопку сценария ещё раз.
+Если звук не запускается — нажми кнопку сценария ещё раз.
 </div>
 
 </div>
 
 <script>
+
 let playing = false;
 let currentAudio = null;
 
@@ -163,9 +190,10 @@ files: [
 { file: "anger_04.m4a", text: "Но давай честно… ты не знаешь, что происходит на той стороне." },
 { file: "anger_05.m4a", text: "Сейчас это чувство. Не факт." },
 { file: "anger_06.m4a", text: "Ты уже был в этом состоянии." },
-{ file: "noanswer_01.m4a", text: "Не навсегда." },
-{ file: "noanswer_02.m4a", text: "Просто на двадцать минут." },
-{ file: "write_12.m4a", text: "Я понимаю." },
+{ file: "abandon_09.m4a", text: "И каждый раз оно проходило." },
+{ file: "abandon_07.m4a", text: "Не пиши сейчас." },
+{ file: "noanswer_02.m4a", text: "Дай этому двадцать минут." },
+{ file: "abandon_08.m4a", text: "Я рядом." },
 { file: "anger_07.m4a", text: "Просто переждём это." }
 ]
 },
@@ -230,7 +258,7 @@ files: [
 },
 
 empty: {
-title: "Пустота",
+title: "Внутри пусто",
 files: [
 { file: "write_15.m4a", text: "Сейчас внутри может быть пусто." },
 { file: "write_16.m4a", text: "Как будто ничего нет." },
@@ -244,7 +272,9 @@ files: [
 };
 
 async function playScenario(key){
+
 const scenario = scenarios[key];
+
 if(!scenario) return;
 
 if(playing && currentAudio){
@@ -256,12 +286,19 @@ playing = false;
 playing = true;
 
 document.getElementById("player").style.display = "block";
-document.getElementById("scenarioTitle").innerText = scenario.title;
+
+document.getElementById("scenarioTitle").innerText =
+scenario.title;
+
 document.getElementById("waveFill").style.width = "0%";
-document.getElementById("status").innerText = "Запускаю голос...";
+
+document.getElementById("status").innerText =
+"Запускаю голос...";
+
 document.getElementById("currentText").innerText = "";
 
 for(let i = 0; i < scenario.files.length; i++){
+
 if(!playing) break;
 
 const item = scenario.files[i];
@@ -269,7 +306,8 @@ const item = scenario.files[i];
 document.getElementById("status").innerText =
 "Фраза " + (i + 1) + " из " + scenario.files.length;
 
-document.getElementById("currentText").innerText = item.text;
+document.getElementById("currentText").innerText =
+item.text;
 
 document.getElementById("waveFill").style.width =
 (((i + 1) / scenario.files.length) * 100) + "%";
@@ -282,15 +320,22 @@ currentAudio.onerror = resolve;
 currentAudio.play().catch(resolve);
 });
 
-await new Promise(resolve => setTimeout(resolve, 900));
+await new Promise(resolve =>
+setTimeout(resolve, 700)
+);
+
 }
 
-document.getElementById("status").innerText = "Волна стала тише.";
+document.getElementById("status").innerText =
+"Волна стала тише.";
+
 document.getElementById("currentText").innerText =
-"Теперь не нужно ничего решать сразу. Просто дай себе паузу.";
+"Теперь не нужно ничего решать сразу.";
 
 playing = false;
+
 }
+
 </script>
 
 </body>
