@@ -1,44 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Волна</title>
 
 <style>
+
 body{
-background:#111;
-color:white;
-font-family:sans-serif;
+margin:0;
+background:#0E0E0D;
+color:#EAE6DC;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
+padding:20px;
+box-sizing:border-box;
+}
+
+.app{
+width:100%;
+max-width:420px;
+}
+
+.logo{
+font-size:42px;
+margin-bottom:10px;
+text-align:center;
+}
+
+.title{
+font-size:34px;
+font-weight:700;
+margin-bottom:10px;
+text-align:center;
+}
+
+.subtitle{
+color:#9B9488;
+line-height:1.5;
+margin-bottom:40px;
 text-align:center;
 }
 
 button{
-padding:15px;
-margin:10px;
+width:100%;
+padding:18px;
+margin-bottom:14px;
 border:none;
-border-radius:12px;
-background:#D6C3A3;
-font-size:18px;
+border-radius:18px;
+font-size:17px;
+font-weight:600;
+background:#1C1C1A;
+color:#EAE6DC;
 }
+
+button.primary{
+background:#D6C3A3;
+color:#111;
+}
+
+.player{
+margin-top:25px;
+padding:20px;
+background:#171715;
+border-radius:20px;
+display:none;
+}
+
+.player-title{
+font-size:18px;
+margin-bottom:12px;
+}
+
+.status{
+color:#9B9488;
+font-size:14px;
+line-height:1.5;
+}
+
+.wave{
+margin-top:20px;
+height:6px;
+background:#2A2A28;
+border-radius:20px;
+overflow:hidden;
+}
+
+.wave-fill{
+height:100%;
+width:0%;
+background:#D6C3A3;
+transition:width .4s;
+}
+
 </style>
 </head>
 
 <body>
 
-<div>
+<div class="app">
 
-<h1>Волна</h1>
+<div class="logo">🌊</div>
 
-<button onclick="alert('Голос подключим следующим шагом')">
-Мне сейчас плохо
+<div class="title">Волна</div>
+
+<div class="subtitle">
+Пережить пик эмоции,<br>
+не разрушая всё вокруг.
+</div>
+
+<button class="primary" onclick="playScenario('anger',8,'Злость')">
+Злюсь и хочу всё разрушить
 </button>
 
+<button onclick="playScenario('abandon',7,'Меня бросят')">
+Страх, что меня бросят
+</button>
+
+<button onclick="playScenario('noanswer',7,'Он не отвечает')">
+Он / она не отвечает
+</button>
+
+<button onclick="playScenario('empty',6,'Пустота')">
+Внутри пусто
+</button>
+
+<button onclick="playScenario('write',10,'Хочу написать')">
+Хочу написать сейчас
+</button>
+
+<div class="player" id="player">
+
+<div class="player-title" id="scenarioTitle">
+Сценарий
 </div>
+
+<div class="status" id="status">
+Подготовка...
+</div>
+
+<div class="wave">
+<div class="wave-fill" id="waveFill"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let playing = false
+
+async function playScenario(name,count,title){
+
+if(playing) return
+
+playing = true
+
+document.getElementById('player').style.display='block'
+document.getElementById('scenarioTitle').innerText=title
+
+for(let i=1;i<=count;i++){
+
+let num = String(i).padStart(2,'0')
+
+document.getElementById('status').innerText =
+'Фраза ' + i + ' из ' + count
+
+document.getElementById('waveFill').style.width =
+((i/count)*100)+'%'
+
+let audio = new Audio(name+'_'+num+'.m4a')
+
+await new Promise(resolve=>{
+
+audio.onended=resolve
+audio.play()
+
+})
+
+await new Promise(r=>setTimeout(r,900))
+
+}
+
+document.getElementById('status').innerText =
+'Волна стала тише.'
+
+playing = false
+
+}
+
+</script>
 
 </body>
 </html>
